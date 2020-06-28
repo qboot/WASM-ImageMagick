@@ -1,4 +1,3 @@
-import StackTrace from "stacktrace-js"
 /**
  * Base class for ImageMagick input and output files.
  */
@@ -27,7 +26,7 @@ export interface MagickInputFile extends MagickFile {
  * {@link call} shortcut that only returns the output files.
  */
 export async function Call(inputFiles: MagickInputFile[], command: string[]): Promise<MagickOutputFile[]> {
-  const result = await call(inputFiles, command)  
+  const result = await call(inputFiles, command)
   for(let outputFile of result.outputFiles)
   {
     outputFile.blob = new Blob([outputFile.buffer])
@@ -109,30 +108,8 @@ function GetCurrentUrlDifferentFilename(fileName)
 {
     return ChangeUrl(currentJavascriptURL, fileName)
 }
-let currentJavascriptURL = './magickApi.js';
 
-// // instead of doing the sane code of being able to just use import.meta.url 
-// // (Edge doesn't work) (safari mobile, chrome, opera, firefox all do)
-// // 
-// // I will use stacktrace-js library to get the current file name
-// //
-// try {
-//   // @ts-ignore
-//   let packageUrl = import.meta.url;
-//   currentJavascriptURL = packageUrl;
-// } catch (error) {
-//   // eat
-// }
-//
-//
-{
-  let stacktrace = StackTrace.getSync();
-  // Pulling the filename from the 3rd callsite of the stacktrace to get the full path
-  // to the module. The first index is inconsitent across browsers and does not return 
-  // the full path in Safari and resuls in the worker failing to reslolve. 
-  currentJavascriptURL = stacktrace[2].fileName;
-}
-
+const currentJavascriptURL = './magickApi.js';
 const magickWorkerUrl = GetCurrentUrlDifferentFilename('magick.js')
 
 function GenerateMagickWorkerText(magickUrl){
